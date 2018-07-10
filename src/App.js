@@ -75,58 +75,76 @@ class App extends Component {
     if (this.state.shelf === "wantToRead") {
       this.setState((currentState) => {
         return {
-          bookShelfs : currentState.bookShelfs.wantToRead.concat([this.state.book])
+          bookShelfs: currentState.bookShelfs.wantToRead.concat([this.state.book])
         }
       })
 
       this.setState((currentState) => {
-        return {
-          bookShelfs : currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
+        if (currentState.bookShelfs.currentlyReading) {
+          return {
+            bookShelfs: currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
+          }
         }
+
       })
 
       this.setState((currentState) => {
-        return {
-          bookShelfs : currentState.bookShelfs.read.filter((name) => name !== this.state.book)
+        if (currentState.bookShelfs.read) {
+          return {
+            bookShelfs: currentState.bookShelfs.read.filter((name) => name !== this.state.book)
+          }
         }
+
       })
     }
 
     if (this.state.shelf === "currentlyReading") {
       this.setState((currentState) => {
         return {
-          bookShelfs : currentState.bookShelfs.currentlyReading.concat([this.state.book])
+          bookShelfs: currentState.bookShelfs.currentlyReading.concat([this.state.book])
         }
       })
       this.setState((currentState) => {
-        return {
-          bookShelfs : currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
+        if (currentState.bookShelfs.wantToRead) {
+          return {
+            bookShelfs: currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
+          }
         }
+
       })
 
       this.setState((currentState) => {
-        return {
-          bookShelfs : currentState.bookShelfs.read.filter((name) => name !== this.state.book)
+        if (currentState.bookShelfs.read) {
+          return {
+            bookShelfs: currentState.bookShelfs.read.filter((name) => name !== this.state.book)
+          }
         }
+
       })
     }
 
     if (this.state.shelf === "read") {
       this.setState((currentState) => {
         return {
-          bookShelfs : currentState.bookShelfs.read.concat([this.state.book])
+          bookShelfs: currentState.bookShelfs.read.concat([this.state.book])
         }
       })
       this.setState((currentState) => {
-        return {
-          bookShelfs : currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
+        if (this.bookShelfs.currentlyReading) {
+          return {
+            bookShelfs: currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
+          }
         }
+
       })
 
       this.setState((currentState) => {
-        return {
-          bookShelfs : currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
+        if (currentState.bookShelfs.wantToRead) {
+          return {
+            bookShelfs: currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
+          }
         }
+
       })
     }
 
