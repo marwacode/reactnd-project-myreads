@@ -22,10 +22,13 @@ class App extends Component {
       },
 
       shelf: '',
+      book: '',
 
     }
 
     this.setQuery = this.setQuery.bind(this)
+    this.setShelf = this.setShelf.bind(this)
+    this.setItems = this.setItems.bind(this)
 
   }
 
@@ -52,8 +55,7 @@ class App extends Component {
       }
 
     }
-
-
+    this.setShelf()
 
   }
 
@@ -61,44 +63,70 @@ class App extends Component {
     this.setState({ query })
   }
 
-  setShelf(shelf, book) {
+  setItems(shelf, book) {
+    this.setState({
+      shelf: shelf,
+      book: book
+    })
+  }
+
+  setShelf() {
     //this.setState({ shelf })
-    if (shelf === "wantToRead") {
-      this.setState({ bookShelfs: this.state.bookShelfs.wantToRead.concat([book]) })
-      this.setState({
-        bookShelfs:
-          this.state.bookShelfs.currentlyReading.filter((name) => name !== book)
+    if (this.state.shelf === "wantToRead") {
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.wantToRead.concat([this.state.book])
+        }
       })
 
-      this.setState({
-        bookShelfs:
-          this.state.bookShelfs.read.filter((name) => name !== book)
-      })
-    }
-
-    if (shelf === "currentlyReading") {
-      this.setState({ bookShelfs: this.state.bookShelfs.currentlyReading.concat([book]) })
-      this.setState({
-        bookShelfs:
-          this.state.bookShelfs.wantToRead.filter((name) => name !== book)
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
+        }
       })
 
-      this.setState({
-        bookShelfs:
-          this.state.bookShelfs.read.filter((name) => name !== book)
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.read.filter((name) => name !== this.state.book)
+        }
       })
     }
 
-    if (shelf === "read") {
-      this.setState({ bookShelfs: this.state.bookShelfs.read.concat([book]) })
-      this.setState({
-        bookShelfs:
-          this.state.bookShelfs.currentlyReading.filter((name) => name !== book)
+    if (this.state.shelf === "currentlyReading") {
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.currentlyReading.concat([this.state.book])
+        }
+      })
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
+        }
       })
 
-      this.setState({
-        bookShelfs:
-          this.state.bookShelfs.wantToRead.filter((name) => name !== book)
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.read.filter((name) => name !== this.state.book)
+        }
+      })
+    }
+
+    if (this.state.shelf === "read") {
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.read.concat([this.state.book])
+        }
+      })
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
+        }
+      })
+
+      this.setState((currentState) => {
+        return {
+          bookShelfs : currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
+        }
       })
     }
 
@@ -108,6 +136,7 @@ class App extends Component {
 
   render() {
     //console.log("shelf",this.state.shelf)
+    console.log(this.state.bookShelfs)
     return (
       <div>
         <Route exact path='/' render={() => (
@@ -118,7 +147,7 @@ class App extends Component {
             onSearch={(query) => {
               this.setQuery(query)
             }}
-            onShelf={(shelf, book) => { this.setShelf(shelf, book) }}
+            onShelf={(shelf, book) => { this.setItems(shelf, book) }}
           />
         )} />
       </div>

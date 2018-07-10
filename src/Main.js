@@ -25,7 +25,7 @@ class Main extends React.Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
 
-                    {currentlyReading ?
+                    {(currentlyReading.length > 0) ?
                       currentlyReading.map((book) => {
 
                         return <li key={book.id} >
@@ -60,7 +60,7 @@ class Main extends React.Component {
                           </div>
 
                         </li>
-                      }) : (<div><h3>No books Found</h3></div>)
+                      }) : (<div><h3>No books</h3></div>)
                     }
 
 
@@ -72,7 +72,7 @@ class Main extends React.Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
 
-                    {wantToRead ?
+                    {(wantToRead.length > 0) ?
                       wantToRead.map((book) => {
 
                         return <li key={book.id} >
@@ -107,7 +107,7 @@ class Main extends React.Component {
                           </div>
 
                         </li>
-                      }) : (<div><h3>No books Found</h3></div>)
+                      }) : (<div><h3>No books</h3></div>)
                     }
 
 
@@ -120,7 +120,7 @@ class Main extends React.Component {
                 <div className="bookshelf-books">
                   <ol className="books-grid">
 
-                    {read ?
+                    {(read.length > 0) ?
                       read.map((book) => {
 
                         return <li key={book.id} >
@@ -155,7 +155,7 @@ class Main extends React.Component {
                           </div>
 
                         </li>
-                      }) : (<div><h3>No books Found</h3></div>)
+                      }) : (<div><h3>No books</h3></div>)
                     }
 
                   </ol>

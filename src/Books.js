@@ -23,6 +23,9 @@ class Books extends Component {
 
     this.updateQuery = this.updateQuery.bind(this)
     this.clearQuery = this.clearQuery.bind(this)
+    this.handleSearch = this.handleSearch.bind(this)
+    this.handleClick = this.handleClick.bind(this)
+    this.handleSelect = this.handleSelect.bind(this)
   }
 
 
