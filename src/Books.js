@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom';
 import escapeRegExp from 'escape-string-regexp';
+
 import './App.css'
 
 class Books extends Component {
@@ -15,17 +16,10 @@ class Books extends Component {
 
     this.state = {
       query: '',
-      item: '',
-      currentValue: '',
-      bookItem: '',
 
     }
 
-    this.updateQuery = this.updateQuery.bind(this)
-    this.clearQuery = this.clearQuery.bind(this)
-    this.handleSearch = this.handleSearch.bind(this)
-    this.handleClick = this.handleClick.bind(this)
-    this.handleSelect = this.handleSelect.bind(this)
+
   }
 
 
@@ -43,26 +37,17 @@ class Books extends Component {
     if (this.props.onSearch) this.props.onSearch(this.state.query)
   }
 
-  handleSelect = () => {
-    if (this.props.onShelf) this.props.onShelf(this.state.currentValue, this.state.bookItem)
-  }
-
-  handleClick = (e) => {
-    this.setState({
-      item: e.target.value,
-
-    });
-
-    this.handleSelect()
+  onChangeBookShelf = (book) => (event) => {
+    
+    const shelfValue = event.target.value;
+    this.props.onChange(book, shelfValue )
+ 
   }
 
 
   render() {
     const { books } = this.props
     const { query } = this.state
-
-    console.log("item", this.state.bookItem)
-    //console.log("value", this.state.currentValue)
 
     let showingBooks = []
     if (query) {
@@ -130,23 +115,23 @@ class Books extends Component {
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: (book.imageLinks) ? `url(${book.imageLinks.smallThumbnail})` : `url(http://via.placeholder.com)` }}></div>
                     <div className="book-shelf-changer">
-                      <select onClick={this.handleClick} >
+                      <select onChange={this.onChangeBookShelf(book)}>
                         <option value="move" disabled>Move to...</option>
 
-                        <option onClick={() => { this.setState({ currentValue: "currentlyReading", bookItem : book}) }}
-                          className={this.state.currentValue === "currentlyReading" ? "book-shelf-changer select" : ""}
+                        <option onClick={this.onChangeBookShelf(book)}
+                          className={book.shelf === "currentlyReading" ? "book-shelf-changer select" : ""}
                           value="currentlyReading">Currently Reading</option>
 
-                        <option onClick={() => { this.setState({ currentValue: "wantToRead",bookItem : book }) }}
-                          className={this.state.currentValue === "wantToRead" ? "book-shelf-changer select" : ""}
+                        <option
+                          className={book.shelf === "wantToRead" ? "book-shelf-changer select" : ""}
                           value="wantToRead">Want to Read</option>
 
-                        <option onClick={() => { this.setState({ currentValue: "read",bookItem : book }) }}
-                          className={this.state.currentValue === "read" ? "book-shelf-changer select" : ""}
+                        <option
+                          className={book.shelf === "read" ? "book-shelf-changer select" : ""}
                           value="read">Read</option>
 
-                        <option onClick={() => { this.setState({ currentValue: "none",bookItem : book }) }}
-                          className={this.state.currentValue === "none" ? "book-shelf-changer select" : ""}
+                        <option
+                          className={book.shelf === "none" ? "book-shelf-changer select" : ""}
                           value="none">None</option>
                       </select>
                     </div>

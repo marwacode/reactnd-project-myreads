@@ -15,20 +15,10 @@ class App extends Component {
     this.state = {
       books: [],
       query: '',
-      bookShelfs: {
-        wantToRead: [],
-        currentlyReading: [],
-        read: []
-      },
-
-      shelf: '',
-      book: '',
 
     }
 
     this.setQuery = this.setQuery.bind(this)
-    this.setShelf = this.setShelf.bind(this)
-    this.setItems = this.setItems.bind(this)
 
   }
 
@@ -37,10 +27,7 @@ class App extends Component {
   componentDidMount() {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
-      //console.log(books)
     })
-
-    this.setShelf()
 
   }
 
@@ -55,7 +42,8 @@ class App extends Component {
       }
 
     }
-    this.setShelf()
+
+    
 
   }
 
@@ -63,109 +51,41 @@ class App extends Component {
     this.setState({ query })
   }
 
-  setItems(shelf, book) {
-    this.setState({
-      shelf: shelf,
-      book: book
-    })
+  updateBook(book, shelfValue) {
+    BooksAPI
+      .update(book, shelfValue)
+      .then(() => {
+        this.setState({
+          ...this.state,
+          books: this.state.books.map(b => {
+            if (b.id !== book.id) return b;
+
+            const nextBook = { ...b };
+
+            nextBook.shelf = shelfValue;
+
+            return nextBook;
+          })
+        })
+      })
   }
 
-  setShelf() {
-    //this.setState({ shelf })
-    if (this.state.shelf === "wantToRead") {
-      this.setState((currentState) => {
-        return {
-          bookShelfs: currentState.bookShelfs.wantToRead.concat([this.state.book])
-        }
-      })
-
-      this.setState((currentState) => {
-        if (currentState.bookShelfs.currentlyReading) {
-          return {
-            bookShelfs: currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
-          }
-        }
-
-      })
-
-      this.setState((currentState) => {
-        if (currentState.bookShelfs.read) {
-          return {
-            bookShelfs: currentState.bookShelfs.read.filter((name) => name !== this.state.book)
-          }
-        }
-
-      })
-    }
-
-    if (this.state.shelf === "currentlyReading") {
-      this.setState((currentState) => {
-        return {
-          bookShelfs: currentState.bookShelfs.currentlyReading.concat([this.state.book])
-        }
-      })
-      this.setState((currentState) => {
-        if (currentState.bookShelfs.wantToRead) {
-          return {
-            bookShelfs: currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
-          }
-        }
-
-      })
-
-      this.setState((currentState) => {
-        if (currentState.bookShelfs.read) {
-          return {
-            bookShelfs: currentState.bookShelfs.read.filter((name) => name !== this.state.book)
-          }
-        }
-
-      })
-    }
-
-    if (this.state.shelf === "read") {
-      this.setState((currentState) => {
-        return {
-          bookShelfs: currentState.bookShelfs.read.concat([this.state.book])
-        }
-      })
-      this.setState((currentState) => {
-        if (this.bookShelfs.currentlyReading) {
-          return {
-            bookShelfs: currentState.bookShelfs.currentlyReading.filter((name) => name !== this.state.book)
-          }
-        }
-
-      })
-
-      this.setState((currentState) => {
-        if (currentState.bookShelfs.wantToRead) {
-          return {
-            bookShelfs: currentState.bookShelfs.wantToRead.filter((name) => name !== this.state.book)
-          }
-        }
-
-      })
-    }
-
-    //BooksAPI.update(book,shelf)
-
-  }
 
   render() {
-    //console.log("shelf",this.state.shelf)
-    console.log(this.state.bookShelfs)
+
     return (
       <div>
         <Route exact path='/' render={() => (
-          <Main bookObject={this.state.bookShelfs} />
+          <Main books={this.state.books}
+            onChange={this.updateBook}
+          />
         )} />
         <Route path='/search' render={() => (
           <Books books={this.state.books}
             onSearch={(query) => {
               this.setQuery(query)
             }}
-            onShelf={(shelf, book) => { this.setItems(shelf, book) }}
+            onChange={this.updateBook}
           />
         )} />
       </div>
