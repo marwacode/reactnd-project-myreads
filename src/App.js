@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
+import escapeRegExp from 'escape-string-regexp';
 import * as BooksAPI from './BooksAPI';
 import Books from './Books';
 import Main from './Main';
@@ -19,6 +20,7 @@ class App extends Component {
     }
 
     this.setQuery = this.setQuery.bind(this)
+    this.updateBook = this.updateBook.bind(this)
 
   }
 
@@ -33,17 +35,21 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
 
-    if (prevState.query !== this.state.query) {
+    //if (prevState.query !== this.state.query) {
       if (this.state.query) {
+        const match = new RegExp(escapeRegExp(this.state.query), 'i')
         BooksAPI.search(this.state.query)
+          .then((books) => books.length > 0 ? books.filter((book) => match.test(book.title || book.authors)) : [])
+          .catch((e) => console.log(e))
           .then((books) => {
             this.setState({ books: books })
           })
+
       }
 
-    }
+    //}
 
-    
+
 
   }
 
@@ -52,6 +58,7 @@ class App extends Component {
   }
 
   updateBook(book, shelfValue) {
+
     BooksAPI
       .update(book, shelfValue)
       .then(() => {
@@ -67,8 +74,11 @@ class App extends Component {
             return nextBook;
           })
         })
-      })
+      }).catch((e) => console.log(e))
+
+
   }
+
 
 
   render() {

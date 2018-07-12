@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types'
+//import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom';
-import escapeRegExp from 'escape-string-regexp';
+//import escapeRegExp from 'escape-string-regexp';
 
 import './App.css'
 
 class Books extends Component {
-  static propTypes = {
-    books: PropTypes.array.isRequired,
+  // static propTypes = {
+  //   books: PropTypes.array.isRequired,
 
-  }
+  // }
 
   constructor(props) {
     super(props)
@@ -25,7 +25,7 @@ class Books extends Component {
 
   updateQuery = (query) => {
     this.setState({ query: query.trim() })
-    this.handleSearch()
+    this.props.onSearch(this.state.query)
 
   }
 
@@ -33,15 +33,13 @@ class Books extends Component {
     this.setState({ query: '' })
   }
 
-  handleSearch = () => {
-    if (this.props.onSearch) this.props.onSearch(this.state.query)
-  }
+
 
   onChangeBookShelf = (book) => (event) => {
-    
-    const shelfValue = event.target.value;
-    this.props.onChange(book, shelfValue )
- 
+
+    const shelfValue = event.target.value || 'none';
+    this.props.onChange(book, shelfValue)
+
   }
 
 
@@ -49,18 +47,9 @@ class Books extends Component {
     const { books } = this.props
     const { query } = this.state
 
-    let showingBooks = []
-    if (query) {
-      const match = new RegExp(escapeRegExp(query), 'i')
-      if (books) {
-        showingBooks = books.filter((book) => match.test(book.title || book.authors))
-      }
 
-    } else {
-      showingBooks = []
-    }
 
-    if (!books) {
+    if (books.length <= 0) {
       return <div className="search-books-bar">
         <Link to='/' className="close-search" >Close</Link>
         <div className="search-books-input-wrapper">
@@ -107,7 +96,7 @@ class Books extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {showingBooks.map((book) => {
+            {books.map((book) => {
 
               return <li key={book.id} >
 
@@ -118,7 +107,7 @@ class Books extends Component {
                       <select onChange={this.onChangeBookShelf(book)}>
                         <option value="move" disabled>Move to...</option>
 
-                        <option onClick={this.onChangeBookShelf(book)}
+                        <option
                           className={book.shelf === "currentlyReading" ? "book-shelf-changer select" : ""}
                           value="currentlyReading">Currently Reading</option>
 
@@ -131,7 +120,7 @@ class Books extends Component {
                           value="read">Read</option>
 
                         <option
-                          className={book.shelf === "none" ? "book-shelf-changer select" : ""}
+                          className={!book.shelf ? "book-shelf-changer select" : ""}
                           value="none">None</option>
                       </select>
                     </div>
