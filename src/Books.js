@@ -104,7 +104,7 @@ class Books extends Component {
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: (book.imageLinks) ? `url(${book.imageLinks.smallThumbnail})` : `url(http://via.placeholder.com)` }}></div>
                     <div className="book-shelf-changer">
-                      <select onChange={this.onChangeBookShelf(book)}>
+                      <select value={book.shelf? book.shelf: "none"} onChange={this.onChangeBookShelf(book)}>
                         <option value="move" disabled>Move to...</option>
 
                         <option

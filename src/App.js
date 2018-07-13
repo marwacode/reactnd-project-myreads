@@ -62,9 +62,9 @@ class App extends Component {
     BooksAPI
       .update(book, shelfValue)
       .then(() => {
-        this.setState({
-          ...this.state,
-          books: this.state.books.map(b => {
+        this.setState(prevState =>({
+          
+          books: prevState.books.map(b => {
             if (b.id !== book.id) return b;
 
             const nextBook = { ...b };
@@ -73,7 +73,7 @@ class App extends Component {
 
             return nextBook;
           })
-        })
+        }))
       }).catch((e) => console.log(e))
 
 
