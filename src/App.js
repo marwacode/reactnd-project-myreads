@@ -27,15 +27,20 @@ class App extends Component {
 
 
   componentDidMount() {
+
+    this.getBooks()
+
+  }
+
+  getBooks = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
     })
-
   }
 
   componentDidUpdate(prevProps, prevState) {
 
-    //if (prevState.query !== this.state.query) {
+    if (prevState.query !== this.state.query) {
       if (this.state.query) {
         const match = new RegExp(escapeRegExp(this.state.query), 'i')
         BooksAPI.search(this.state.query)
@@ -47,7 +52,7 @@ class App extends Component {
 
       }
 
-    //}
+    }
 
 
 
@@ -57,13 +62,21 @@ class App extends Component {
     this.setState({ query })
   }
 
+  getShelf = (book) => {
+
+    BooksAPI.getAll().then((books) => {
+      books.filter((b) => b.id === book.id)
+    }).then((book) => book.shelf)
+  }
+
+
   updateBook(book, shelfValue) {
 
     BooksAPI
       .update(book, shelfValue)
       .then(() => {
-        this.setState(prevState =>({
-          
+        this.setState(prevState => ({
+
           books: prevState.books.map(b => {
             if (b.id !== book.id) return b;
 
@@ -76,7 +89,6 @@ class App extends Component {
         }))
       }).catch((e) => console.log(e))
 
-
   }
 
 
@@ -88,6 +100,7 @@ class App extends Component {
         <Route exact path='/' render={() => (
           <Main books={this.state.books}
             onChange={this.updateBook}
+            onStart={this.getBooks}
           />
         )} />
         <Route path='/search' render={() => (
