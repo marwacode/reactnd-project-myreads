@@ -15,20 +15,18 @@ class App extends Component {
 
     this.state = {
       books: [],
-      query: '',
-
+     
     }
 
-    this.setQuery = this.setQuery.bind(this)
     this.updateBook = this.updateBook.bind(this)
 
   }
 
 
-
   componentDidMount() {
 
     this.getBooks()
+
 
   }
 
@@ -38,35 +36,38 @@ class App extends Component {
     })
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  // componentDidUpdate(prevProps, prevState) {
 
-    if (prevState.query !== this.state.query) {
-      if (this.state.query) {
-        const match = new RegExp(escapeRegExp(this.state.query), 'i')
-        BooksAPI.search(this.state.query)
-          .then((books) => books.length > 0 ? books.filter((book) => match.test(book.title || book.authors)) : [])
-          .catch((e) => console.log(e))
-          .then((books) => {
-            this.setState({ books: books })
-          })
+  //   if (prevState.query !== this.state.query) {
+  //     if (this.state.query) {
+  //       const match = new RegExp(escapeRegExp(this.state.query), 'i')
+  //       BooksAPI.search(this.state.query)
+  //         .then((books) => books.length > 0 ? books.filter((book) => match.test(book.title || book.authors)) : [])
+  //         .catch((e) => console.log(e))
+  //         .then((books) => {
+  //           this.setState({ books: books })
+  //         })
 
-      }
+  //     }
+
+  //   }
+
+  // }
+
+  
+
+  searchItem = (query) => {
+    if (query.length > 0) {
+      const match = new RegExp(escapeRegExp(query), 'i')
+      BooksAPI.search(query)
+        .then((books) => books.length > 0 ? books.filter((book) => match.test(book.title || book.authors)) : [])
+        .catch((e) => console.log(e))
+        .then((books) => {
+          this.setState({ books: books })
+        })
 
     }
 
-
-
-  }
-
-  setQuery(query) {
-    this.setState({ query })
-  }
-
-  getShelf = (book) => {
-
-    BooksAPI.getAll().then((books) => {
-      books.filter((b) => b.id === book.id)
-    }).then((book) => book.shelf)
   }
 
 
@@ -88,12 +89,16 @@ class App extends Component {
           })
         }))
       }).catch((e) => console.log(e))
+      .then(() => {
+        this.setState({ query: "" })
+      })
 
   }
 
 
 
   render() {
+
 
     return (
       <div>
@@ -106,7 +111,7 @@ class App extends Component {
         <Route path='/search' render={() => (
           <Books books={this.state.books}
             onSearch={(query) => {
-              this.setQuery(query)
+              this.searchItem(query)
             }}
             onChange={this.updateBook}
           />

@@ -16,24 +16,28 @@ class Main extends React.Component {
 
   }
 
+  componentDidMount() {
+
+    this.props.onStart()
+
+  }
+
   onChangeBookShelf = (book) => (event) => {
 
     const shelfValue = event.target.value;
 
     this.props.onChange(book, shelfValue)
 
+
   }
 
 
   render() {
-    
-    this.props.onStart()
 
     const { books } = this.props;
     const currentlyReading = books ? books.filter(book => book.shelf === 'currentlyReading') : [];
     const wantToRead = books ? books.filter(book => book.shelf === 'wantToRead') : [];
     const read = books ? books.filter(book => book.shelf === 'read') : [];
-
 
     return (
       <div className="app">

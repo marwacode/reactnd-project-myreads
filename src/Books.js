@@ -37,23 +37,14 @@ class Books extends Component {
 
     const shelfValue = event.target.value;
     this.props.onChange(book, shelfValue)
-  
+
+
   }
-
-  // getShelf = (book) => {
-
-  //   BooksAPI.getAll().then((books) => {
-  //     books.filter((b) => b.id === book.id)
-  //   }).then((book) => this.setState({
-  //     shelf: book.shelf
-  //   }))
-  // }
 
 
   render() {
     const { books } = this.props
     const { query } = this.state
-
 
     if (books.length <= 0) {
       return <div className="search-books-bar">
@@ -110,7 +101,8 @@ class Books extends Component {
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: (book.imageLinks) ? `url(${book.imageLinks.smallThumbnail})` : `url(http://via.placeholder.com)` }}></div>
                     <div className="book-shelf-changer">
-                      <select value={book.shelf} onChange={this.onChangeBookShelf(book)}>
+                      <select value={book.shelf ? book.shelf : 'none'}
+                        onChange={this.onChangeBookShelf(book)}>
                         <option value="move" disabled>Move to...</option>
 
                         <option
@@ -126,7 +118,7 @@ class Books extends Component {
                           value="read">Read</option>
 
                         <option
-                          className={book.shelf === "none" ? "book-shelf-changer select" : ""}
+                          className={!book.shelf ? "book-shelf-changer select" : ""}
                           value="none">None</option>
                       </select>
                     </div>
