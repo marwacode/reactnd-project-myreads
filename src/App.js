@@ -15,6 +15,7 @@ class App extends Component {
 
     this.state = {
       books: [],
+      bookResults: [],
 
     }
 
@@ -43,10 +44,17 @@ class App extends Component {
         .then((books) => books.length > 0 ? books.filter((book) => match.test(book.title || book.authors)) : [])
         .catch((e) => console.log(e))
         .then((books) => {
-          this.setState({ books: books })
+          this.setState({
+            bookResults: books,
+            books: books
+          })
+          
         })
+        .then(this.getBooks())
 
     }
+
+
 
   }
 
@@ -72,6 +80,7 @@ class App extends Component {
       .then(() => {
         this.setState({ query: "" })
       })
+      .then(this.getBooks())
 
   }
 
@@ -89,10 +98,12 @@ class App extends Component {
         )} />
         <Route path='/search' render={() => (
           <Books books={this.state.books}
+            bookResults={this.state.bookResults}
             onSearch={(query) => {
               this.searchItem(query)
             }}
             onChange={this.updateBook}
+            onStart={this.getBooks}
           />
         )} />
       </div>

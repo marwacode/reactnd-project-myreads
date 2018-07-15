@@ -17,6 +17,7 @@ class Books extends Component {
 
     this.state = {
       query: '',
+
     }
   }
 
@@ -38,13 +39,59 @@ class Books extends Component {
     const shelfValue = event.target.value;
     this.props.onChange(book, shelfValue)
 
-
   }
 
 
   render() {
     const { books } = this.props
     const { query } = this.state
+
+    const list = this.props.bookResults.map((book) => {
+      books.map((b) => {
+        if (book.id === b.id) {
+          book.shelf = b.shelf
+        }
+        return book.shelf
+      })
+      if (!book.shelf) {
+        book.shelf = 'none'
+      }
+
+      return (<li key={book.id} >
+
+        <div className="book">
+          <div className="book-top">
+            <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: (book.imageLinks) ? `url(${book.imageLinks.smallThumbnail})` : `url(http://via.placeholder.com)` }}></div>
+            <div className="book-shelf-changer">
+              <select value={book.shelf}
+                onChange={this.onChangeBookShelf(book)}>
+                <option value="move" disabled>Move to...</option>
+
+                <option
+                  className={book.shelf === "currentlyReading" ? "book-shelf-changer select" : ""}
+                  value="currentlyReading">Currently Reading</option>
+
+                <option
+                  className={book.shelf === "wantToRead" ? "book-shelf-changer select" : ""}
+                  value="wantToRead">Want to Read</option>
+
+                <option
+                  className={book.shelf === "read" ? "book-shelf-changer select" : ""}
+                  value="read">Read</option>
+
+                <option
+                  className={!book.shelf || book.shelf === 'none' ? "book-shelf-changer select" : ""}
+                  value="none">None</option>
+              </select>
+            </div>
+          </div>
+          <div className="book-title">{book.title}</div>
+          <div className="book-authors">{book.authors}</div>
+        </div>
+
+      </li>
+      )
+    })
 
     if (books.length <= 0) {
       return <div className="search-books-bar">
@@ -93,42 +140,7 @@ class Books extends Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {books.map((book) => {
-
-              return <li key={book.id} >
-
-                <div className="book">
-                  <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: (book.imageLinks) ? `url(${book.imageLinks.smallThumbnail})` : `url(http://via.placeholder.com)` }}></div>
-                    <div className="book-shelf-changer">
-                      <select value={book.shelf ? book.shelf : 'none'}
-                        onChange={this.onChangeBookShelf(book)}>
-                        <option value="move" disabled>Move to...</option>
-
-                        <option
-                          className={book.shelf === "currentlyReading" ? "book-shelf-changer select" : ""}
-                          value="currentlyReading">Currently Reading</option>
-
-                        <option
-                          className={book.shelf === "wantToRead" ? "book-shelf-changer select" : ""}
-                          value="wantToRead">Want to Read</option>
-
-                        <option
-                          className={book.shelf === "read" ? "book-shelf-changer select" : ""}
-                          value="read">Read</option>
-
-                        <option
-                          className={!book.shelf ? "book-shelf-changer select" : ""}
-                          value="none">None</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div className="book-title">{book.title}</div>
-                  <div className="book-authors">{book.authors}</div>
-                </div>
-
-              </li>
-            })}
+            {list}
           </ol>
         </div>
       </div>
