@@ -15,7 +15,7 @@ class App extends Component {
 
     this.state = {
       books: [],
-     
+
     }
 
     this.updateBook = this.updateBook.bind(this)
@@ -35,26 +35,6 @@ class App extends Component {
       this.setState({ books })
     })
   }
-
-  // componentDidUpdate(prevProps, prevState) {
-
-  //   if (prevState.query !== this.state.query) {
-  //     if (this.state.query) {
-  //       const match = new RegExp(escapeRegExp(this.state.query), 'i')
-  //       BooksAPI.search(this.state.query)
-  //         .then((books) => books.length > 0 ? books.filter((book) => match.test(book.title || book.authors)) : [])
-  //         .catch((e) => console.log(e))
-  //         .then((books) => {
-  //           this.setState({ books: books })
-  //         })
-
-  //     }
-
-  //   }
-
-  // }
-
-  
 
   searchItem = (query) => {
     if (query.length > 0) {
@@ -98,7 +78,6 @@ class App extends Component {
 
 
   render() {
-
 
     return (
       <div>
