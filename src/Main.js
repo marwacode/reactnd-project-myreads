@@ -5,16 +5,6 @@ import './App.css'
 
 class Main extends React.Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      currentValue: '',
-
-    }
-
-
-  }
 
   componentDidMount() {
 

@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-//import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom';
-//import * as BooksAPI from './BooksAPI';
 
+import { Link } from 'react-router-dom';
 
 import './App.css'
 
 class Books extends Component {
-  // static propTypes = {
-  //   books: PropTypes.array.isRequired,
-
-  // }
 
   constructor(props) {
     super(props)
